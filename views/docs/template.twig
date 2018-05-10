@@ -1,0 +1,53 @@
+{% extends 'general' %}
+
+{% block head %}
+    <link rel='stylesheet' href='{{ assetDir }}css/wiki.css'/>
+{% endblock head %}
+
+{% block foot %}
+    <link rel="stylesheet" href="{{ assetDir }}highlight/styles/darcula.css">
+    <script src='{{ assetDir }}highlight/highlight.pack.js'></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+{% endblock %}
+
+{% block content %}
+    <div class="col-xs-12 wiki">
+        <div class="row">
+            <div class="col-xs-8">
+                <form action="{{ href('/wiki/') }}" name="searchForm" method="get">
+                    <div class="form-group">
+                        <span class="input-group">
+                            <span class="input-group-btn"><button type="submit" class="btn btn-primary">Найти</button></span>
+                            <input type="text" name="q" value="{{ queryParam }}"
+                                   placeholder="Поиск по документации..."
+                                   id="query" class="form-control">
+                        </span>
+                    </div>
+                    <hr>
+                </form>
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="welcome-block">
+                            {% if article is not empty %}
+                            <a href="https://github.com/jphp-compiler/develnext-wiki/edit/master/{{ article.uid }}.md"
+                               style="display: inline-block; float: right; font-size: 1em;"><small>[редактировать]</small>
+                            </a>
+                            {% endif %}
+
+                            {% block wiki_content %}{% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                {% if sidebar is not empty %}
+                    <div class="sidebar">
+                        {{ sidebar.content | raw }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

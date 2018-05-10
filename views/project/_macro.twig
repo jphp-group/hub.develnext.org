@@ -1,0 +1,165 @@
+{% macro project_breadcrumb(project) %}
+    <ul class="breadcrumb">
+        <li><a href="{{ href('/') }}">Главная</a></li>
+        <li><a href="{{ href('/projects/list/all') }}">Проекты</a></li>
+        <li><a href="{{ href('/account/' ~ project.owner) }}">{{ project.ownerData.login }}</a></li>
+        <li class="active"><span>{{ project.name }}</span></li>
+    </ul>
+{% endmacro %}
+
+{% macro project_meta(project, assetDir = '/assets/') %}
+    {% if project.archive.meta is not empty %}
+        <div class="alert alert-warning">
+            Создано с помощью <b>{{ project.archive.meta.ideName }} {{ project.archive.meta.ideVersion }}</b>,
+            на операционной системе <b>{{ project.archive.meta.authorOS }}</b>.
+
+        {% if project.archive.meta.bundles is not empty %}
+            <hr>
+            <div>
+            {% for bundle in project.archive.meta.bundles %}
+                {% if bundlePublicName(bundle) != 'JPHPDesktopDebug' %}
+                <span class="label label-default" title="{{ bundle }}">{{ bundlePublicName(bundle) }}</span>
+                {% endif %}
+            {% endfor %} - Подключенные пакеты.
+            </div>
+        {% endif %}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro project_card(project, assetDir = '/assets/') %}
+    <div style="margin-bottom: 20px;">
+        <div class="project-short-card">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-7 col-xs-12">
+                            <div class="title-header"><span><img src="{{ assetDir }}img/zipArchive32.png" class=""
+                                                                 style="width: 32px; height: 32px; display: inline-block; vertical-align: middle; margin-right: 15px;"><div
+                                            class="title-header-text"
+                                            style="display: inline-block; vertical-align: middle;"><h4
+                                                style="color: black; margin-bottom: 0px; font-size: 1em;">{{ project.name }}</h4><small
+                                                style="color: gray;">Исходный проект</small></div></span></div>
+                        </div>
+                        <div class="col-md-5" style="text-align: right;">
+                            <a href="{{ href('/account/' ~ project.owner) }}" class="title-header"
+                               style="cursor: pointer; padding-bottom: 3px;"><span><div
+                                            class="title-header-text"
+                                            style="display: inline-block; vertical-align: middle;"><h4
+                                                style="color: black; margin-bottom: 0px; font-size: 0.9em;">{{ project.ownerData.login }}</h4><small
+                                                style="color: gray;">Автор проекта</small></div><img
+                                            src="{{ project.ownerData.avatarUrl is empty ? assetDir ~ 'img/no_avatar128.png' : project.ownerData.avatarUrl }}"
+                                            class=""
+                                            style="width: 32px; height: 32px; display: inline-block; vertical-align: middle; margin-left: 15px;"></span>
+                            </a>
+                        </div>
+                    </div>
+                    <hr>
+                    <div style="color: gray;">
+                        {{ project_meta(project, assetDir) }}
+                        Описание проекта отсутствует.
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <a href="{{ href('/project/' ~ project.uid) }}" type="button" class="btn btn-primary"
+                       style="vertical-align: middle;">Подробнее</a>
+                    <div style="display: inline-block; margin-left: 15px; vertical-align: middle;"><span
+                                class="text-label" aria-describedby="tooltip" style="cursor: default;"><span
+                                    aria-hidden="true" class="fa fa-hdd-o"></span><span
+                                    style="color: gray; font-size: 0.9em;"> </span><span
+                                    style="color: gray; font-size: 0.9em;">{{ project.archive.fileData.size | fileSize }}</span></span><span
+                                style="padding: 10px;">-</span><span class="date-time-label"><span aria-hidden="true"
+                                                                                                   class="fa fa-clock-o"></span>
+                            <span style="color: gray; font-size: 0.9em;">{{ project.createdAt | format('dd MMM yyyy, HH:mm') }}</span></span><span
+                                style="padding: 10px;">-</span><span class="text-label" aria-describedby="tooltip"
+                                                                     style="cursor: default;"><span aria-hidden="true"
+                                                                                                    class="fa fa-eye"></span><span
+                                    style="color: gray; font-size: 0.9em;"> </span><span
+                                    style="color: gray; font-size: 0.9em;">{{ project.viewCount }}</span></span><span
+                                style="padding: 10px;">-</span><span class="text-label" aria-describedby="tooltip"
+                                                                     style="cursor: default;"><span aria-hidden="true"
+                                                                                                    class="fa fa-arrow-down"></span><span
+                                    style="color: gray; font-size: 0.9em;"> </span><span
+                                    style="color: gray; font-size: 0.9em;">{{ project.downloadCount }}</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endmacro %}
+
+{% macro project_list(projects) %}
+    {% for project in projects %}
+        {{ project_card(project) }}
+    {% endfor %}
+
+    {% if projects is empty %}
+        <div>Список проектов пуст.</div>
+    {% endif %}
+{% endmacro %}
+
+{% macro project_menu(selected = 'all') %}
+
+    {% set menu = [
+    {'code': 'all', 'title': 'Последние'},
+    {'code': 'popularMonthly', 'title': 'Популярные за месяц'},
+    {'code': 'popular', 'title': 'Лучшие проекты'},
+    {'code': 'search', 'title': 'Поиск проектов'}
+    ] %}
+
+    <ul class="nav nav-pills nav-stacked">
+        {% for item in menu %}
+            {% if item.code == 'search' %}
+                <hr/>
+            {% endif %}
+            <li class="{{ item.code == selected ? 'active' : '' }}"><a
+                        href="{{ href('/projects/list/' ~ item.code) }}">{{ item.title }}</a></li>
+        {% endfor %}
+    </ul>
+
+{% endmacro %}
+
+{% macro project_desc(project) %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                {% if project.banned %}
+                    <div class="col-md-12">
+                        <div class="alert alert-warning" style="margin-bottom: 0">
+                            Причина блокировки: {{ project.bannedReason is not empty ? project.bannedReason : 'Многочисленные нарушения правил.' }}
+                        </div>
+                        <hr>
+                        <blockquote style="margin-bottom: 0; font-size: 1em">
+                            Проект был заблокирован за нарушение правил сервиса hub.develnext.org.
+                        </blockquote>
+                    </div>
+                {% else %}
+                    <div class="col-md-8">
+                        <a href="https://api.develnext.org/project/projects/{{ project.id }}/{{ project.downloadKey }}/download"
+                           class="btn btn-primary"><i class="fa fa-arrow-down" aria-hidden="true"></i> Скачать</a>
+
+                        <a href="develnext://project:{{ project.uid }}" type="button" class="btn btn-success"
+                           style="margin-left: 10px;">Открыть в DevelNext</a>
+                    </div>
+
+                    <div class="col-md-4" style="text-align: right; padding-top: 4px;">
+                    <span class="text-label" data-toggle="tooltip" title="Всего просмотров" style="cursor: default;">
+                        <span aria-hidden="true" class="fa fa-eye" style="font-size: 1.8em; color: gray;"></span>
+                        <span style="font-size: 1.8em; color: gray;"> </span>
+                        <span style="font-size: 1.8em; color: gray;">{{ project.viewCount }}</span>
+                    </span>
+                        <span style="padding: 10px;"></span>
+                        <span class="text-label" data-toggle="tooltip" title="Всего скачиваний"
+                              style="cursor: default;">
+                        <span aria-hidden="true" class="fa fa-arrow-down" style="font-size: 1.8em; color: gray;"></span>
+                        <span style="font-size: 1.8em; color: gray;"> </span>
+                        <span style="font-size: 1.8em; color: gray;">{{ project.downloadCount }}</span>
+                    </span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+

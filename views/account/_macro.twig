@@ -1,0 +1,23 @@
+{% macro account_small_info(accountData, right = false, title = 'Автор проекта') %}
+    <div class="title-header" style="cursor: pointer; padding-bottom: 3px;">
+        <a href="{{ href('/account/' + accountData.id) }}">
+            {% if right %}
+                <div class="title-header-text" style="display: inline-block; vertical-align: middle;">
+                    <h4 style="color: black; margin-bottom: 0px; font-size: 0.9em;">{{ accountData.login }}</h4>
+                    <small style="color: gray;">{{ title }}</small>
+                </div>
+
+                <img src="{{ accountData.avatarUrl is empty ? assetPath('img/no_avatar128.png') : accountData.avatarUrl }}"
+                     style="width: 32px; height: 32px; display: inline-block; vertical-align: middle; margin-left: 15px;">
+            {% else %}
+                <img src="{{ accountData.avatarUrl is empty ? assetPath('img/no_avatar128.png') : accountData.avatarUrl }}"
+                     style="width: 32px; height: 32px; display: inline-block; vertical-align: middle; margin-right: 15px;">
+
+                <div class="title-header-text" style="display: inline-block; vertical-align: middle;">
+                    <h4 style="color: black; margin-bottom: 0px; font-size: 0.9em;">{{ accountData.login }}</h4>
+                    <small style="color: gray;">{{ title }}</small>
+                </div>
+            {% endif %}
+        </a>
+    </div>
+{% endmacro %}

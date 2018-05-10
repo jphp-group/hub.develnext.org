@@ -1,0 +1,36 @@
+dependencies:
+  jphp-core:
+    version: 1.0.0
+    info:
+      size: 730681
+      sha256: 62aa63a795fd782517172e3754c5577837a6a8f7d5f85a7f91ee6f9c9a0b72ab
+  jphp-runtime:
+    version: 1.0.0
+    info:
+      size: 1812492
+      sha256: 0dc931eb98293d7bcce7e0f89adefdd4e214d13d11e36b16a824c448bd91159b
+  jphp-yaml-ext:
+    version: 1.0.0
+    info:
+      size: 306051
+      sha256: 6cfd56d7f0c49f63ffc3f42c3b31fcacac4df9d27dece34a6bc757be6f7737dc
+  jphp-httpserver-ext:
+    version: 1.0.0
+    info:
+      size: 2341312
+      sha256: cd2424b6ac7812f2e452a1bf7c136be9a36a2f3f68a37060dc3a54360436ed61
+  jphp-httpclient-ext:
+    version: 1.0.1
+    info:
+      size: 6679
+      sha256: 6126db5f9c59c03656017327c984a6e5b90a3b0308503f2143d7e6580b16e2be
+  jphp-json-ext:
+    version: 1.0.0
+    info:
+      size: 254085
+      sha256: 644ff174db4d9af0ead160c1eff2862eb7f0139bb71bdae3013479428fe5420e
+  twig:
+    version: 1.0.1
+    info:
+      size: 1045518
+      sha256: f043ef16d344be00d735a46035e289fcfae1b21ebcb5a6d12f4ac0ff7ab02021

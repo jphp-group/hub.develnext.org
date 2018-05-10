@@ -1,0 +1,14 @@
+{% extends 'general' %}
+
+{% import 'project/_macro' %}
+
+{% block pageTitle %}
+        <span style="color: silver;">Пользователь -</span> {{ account.login }}
+{% endblock %}
+
+{% block content %}
+    <h3>Проекты</h3>
+    <hr />
+    
+    {{ project_list(projects) }}
+{% endblock %}

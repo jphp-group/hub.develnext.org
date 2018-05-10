@@ -1,0 +1,7 @@
+
+server:
+  host: localhost
+  port: 5000
+
+api:
+  develnext: 'https://api.develnext.org'

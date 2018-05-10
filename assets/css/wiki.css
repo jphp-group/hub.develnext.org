@@ -1,0 +1,30 @@
+
+.wiki {
+    line-height: 22px;
+    color: #24292e;
+}
+
+.wiki h1 {
+    margin: 0 0 20px;
+    padding: 0 0 15px;
+    border-bottom: 1px solid #e2e2e2;
+}
+.wiki h1 a { color: #6f6f6f; text-decoration: none; }
+.wiki h4 a, .wiki h3 a, .wiki h2 a { text-decoration: none;  }
+
+.wiki h4 a { color: black; }
+.wiki h4 { font-size: 1.1em; font-weight: bold; color: black; }
+.wiki h3 { font-size: 20px; }
+.wiki h2 { font-size: 24px; border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; margin-top: 0; }
+
+.wiki blockquote { color: #868686; font-size: 1.0em; padding: 7px 16px; margin-bottom: 15px; }
+.wiki .sidebar blockquote { font-size: 0.9em; padding: 3px 8px; line-height: 20px; }
+
+.wiki ul, .wiki ol { margin-bottom: 16px; }
+.wiki li+li { margin-top: 3px; }
+
+.wiki code { font-size: 1em; padding: 2px 4px; }
+.wiki pre { padding: 0; border: 0; }
+.wiki pre code { padding: 9px 15px; }
+
+.wiki a code { color: #0366d6; }

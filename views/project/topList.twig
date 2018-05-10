@@ -1,0 +1,22 @@
+{% extends 'general' %}
+
+{% import 'project/_macro' %}
+
+{% block title %}Проекты и исходники - {% endblock %}
+
+{% block pageTitle %}
+    Проекты
+{% endblock %}
+
+{% block content %}
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-md-3">
+                {{ project_menu(topName) }}
+            </div>
+            <div class="col-xs-8">
+                {{ project_list(list) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

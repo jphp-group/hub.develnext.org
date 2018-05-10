@@ -1,0 +1,37 @@
+name: dn-hub-2
+version: 1.0.0
+description: hub.develnext.org
+
+deps:
+  jphp-core: '*'
+  jphp-yaml-ext: '*'
+  jphp-httpserver-ext: '*'
+  jphp-httpclient-ext: '*'
+  jphp-json-ext: '*'
+  twig: '*'
+
+plugins: [App]
+
+sources:
+- src
+
+includes:
+- index.php
+
+config:
+  ignore:
+  - '/.idea/**'
+  - '*.iml'
+
+app:
+  assets:
+  - 'assets'
+  - 'views'
+  - 'application.yml'
+  - 'start.sh'
+  - 'stop.sh'
+  - 'restart.sh'
+
+  build:
+    file-name: 'dn-hub'
+    result: 'tar'

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}DevelNext Hub</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/darcula.min.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet">
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="{{ assetDir }}bootstrap/css/bootstrap.min.css" />
+    <!-- <link rel="stylesheet" href="{{ assetDir }}bootstrap/themes/lumen.css" /> -->
+    
+    <link rel="stylesheet" href="{{ assetDir }}font-awesome/css/font-awesome.min.css" />
+
+    <link rel='stylesheet' href='{{ assetDir }}css/main.css' />
+
+    <!-- jquery -->
+    <script src="{{ assetDir }}js/lib/jquery-3.2.1.min.js"></script>
+    <script src="{{ assetDir }}js/lib/jquery-migrate-3.0.0.min.js"></script>
+
+    <!-- bootstrap js -->
+    <script src="{{ assetDir }}bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="{{ assetDir }}js/main.js"></script>
+
+    <script type="application/javascript">
+        $$ = {};
+        $$.registry = {
+            endpoint: 'https://api.develnext.org',
+            services:  {
+                auth: '/auth',
+                file: '/file',
+                artDb: '/art-db',
+                project: '/project',
+                ide: '/ide'
+            }
+        };
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    {% block head %}{% endblock %}
+</head>
+<body class="wrap page">
+    <div id="root">
+        {% block root %}<span style="color: red">No Content</span>{% endblock %}
+    </div>
+
+    {% block foot %}{% endblock %}
+</body>
+</html>

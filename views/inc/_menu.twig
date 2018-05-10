@@ -1,0 +1,13 @@
+
+
+<li class="{{ urlPath() is starts('/projects/') ? 'active' : '' }}">
+    <a href="{{ href('/projects/list/all') }}"><i class="fa fa-cubes" aria-hidden="true"></i> Проекты</a>
+</li>
+
+<li class="{{ urlPath() is starts('/wiki/') or urlPath() == '/wiki' ? 'active' : '' }}">
+    <a href="{{ href('/wiki') }}"><i class="fa fa-book" aria-hidden="true"></i> Документация</a>
+</li>
+
+<li>
+    <a href="https://vk.com/develnextstudio" target="_blank"><i class="fa fa-vk" style="color: #4c82ed" aria-hidden="true"></i> VK группа</a>
+</li>

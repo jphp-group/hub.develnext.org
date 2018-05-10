@@ -1,0 +1,57 @@
+
+body {
+    background: #fafafa;
+    margin: 0;
+    padding: 0;
+    font: 14.8px "Ubuntu", sans-serif;
+}
+
+a { color: #27659D; }
+
+h4 { margin-top: 0; padding-top: 0; }
+
+.navbar-nav {
+    margin: 10px;
+}
+
+.navbar-brand {
+    background: url("../img/dn_small_logo.png") 10px 50% no-repeat;
+    background-size: 48px 48px;
+    padding-left: 70px;
+
+    font-size: 24px;
+    color: #27659D;
+    height: auto;
+}
+
+.navbar-brand small {
+    color: gray;
+    font-size: 14px;
+    display: block;
+}
+
+.content { }
+
+.page-header {
+    padding-bottom: 9px;
+    margin: 0px 0 20px;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.page-header h1 { color: #6f6f6f; margin-top: 0; }
+
+
+.glyphicon.spinning {
+    animation: spin 1s infinite linear;
+    -webkit-animation: spin2 1s infinite linear;
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg); }
+    to { transform: scale(1) rotate(360deg); }
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}

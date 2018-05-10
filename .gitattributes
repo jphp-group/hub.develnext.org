@@ -1,0 +1,5 @@
+
+/start.sh text eol=lf
+/stop.sh text eol=lf
+/restart.sh text eol=lf
+

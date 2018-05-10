@@ -1,0 +1,7 @@
+{% extends 'docs/template' %}
+
+{% block title %}{{ article.title }} - Документация - {% endblock %}
+
+{% block wiki_content %}
+    {{ article.content | raw }}
+{% endblock %}

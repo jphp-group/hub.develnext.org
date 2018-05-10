@@ -1,0 +1,22 @@
+{% extends 'docs/template' %}
+
+{% block title %}Поиск "{{ queryParam }}" - Документация - {% endblock %}
+
+{% block wiki_content %}
+    <h4>Результаты поиска "{{ queryParam }}"</h4>
+
+    {% if results is empty %}
+        <hr>
+        Ничего не найдено.
+    {% endif %}
+
+    {% for item in results %}
+        <hr>
+        <div class="item">
+            <a href="{{ href('/wiki/') ~ item.id }}">{{ item.title }}</a>
+            <blockquote>
+                {{ item.preview }}
+            </blockquote>
+        </div>
+    {% endfor %}
+{% endblock %}

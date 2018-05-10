@@ -1,0 +1,165 @@
+{% extends 'general' %}
+
+{% import 'project/_macro' %}
+{% import 'account/_macro' %}
+
+{% block title %}{% if project is not empty %}{{ project.name }} - Исходный проект - {% endif %}{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+
+    <script src="{{ assetPath('ace/noconflict/ace.js') }}" type="text/javascript" charset="utf-8"></script>
+{% endblock %}
+
+{% block pageTitle %}
+    {% if project is empty %}
+        404. Проект не найден или был удален.
+    {% else %}
+        <span style="color: silver;">Проект -</span> {{ project.name }}
+        {% if project.banned %}<span class="label label-danger">Заблокирован</span>{% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if project is not empty %}
+        {{ project_breadcrumb(project) }}
+        {{ project_desc(project) }}
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-8 col-xs-12">
+                        {{ account_small_info(project.ownerData) }}
+                    </div>
+                    <div class="col-md-4" style="text-align: right;">
+                        <div><span class="date-time-label"><span aria-hidden="true" class="fa fa-clock-o"></span>
+                                <span style="color: gray; font-size: 0.9em;">{{ project.createdAt | format('dd MMM yyyy, HH:mm') }}</span></span>
+                        </div>
+                        <div style="padding-top: 5px;"><span class="text-label" aria-describedby="tooltip"
+                                                             style="cursor: default;"><span aria-hidden="true"
+                                                                                            class="fa fa-hdd-o"></span><span
+                                        style="color: gray; font-weight: bold; font-size: 0.9em;"> </span><span
+                                        style="color: gray; font-weight: bold; font-size: 0.9em;">{{ project.archive.fileData.size | fileSize }}</span></span>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div style="color: gray; margin-bottom: 15px;">
+                    {{ project_meta(project) }}
+
+                    {% if project.description is empty %}
+                        Описание проекта отсутствует.
+                    {% else %}
+                        {{ project.description }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+
+        {% if not project.banned %}
+            <hr>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Содержимое проекта</div>
+                <div class="panel-body">
+                    <div class="project-tree">
+                        <div class="file-contents list-group">
+                            {% if contents is empty %}
+                                Содержимое проекта недоступно.
+                            {% else %}
+                                {% for item in contents %}
+                                    {% if item.name is not starts('.dn/') %}
+                                        <a href="#" rel="nofollow" data-name="{{ item.name }}"
+                                           class="list-group-item"><span
+                                                    aria-hidden="true" class="fa fa-file"></span> {{ item.name }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div style="display: none" class="modal fade modal-window" tabindex="-1" role="dialog"
+                             aria-labelledby="myLargeModalLabel">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close"><span
+                                                    aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel"></h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div id="file-editor" style="height: 600px; font-size: 14px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script type="text/javascript">
+                $('.project-tree .list-group-item').on('click', function (e) {
+                    var src = $(this).attr('data-name');
+
+                    var modal = $('.modal-window');
+                    modal.find('.modal-title').text(src);
+
+                    var editor = ace.edit("file-editor");
+                    editor.setTheme('ace/theme/tomorrow_night');
+                    editor.setHighlightActiveLine(true);
+                    editor.setReadOnly(true);
+
+                    var syntax = null;
+
+                    if (src.endsWith('.php') || src.endsWith('.php.source')) {
+                        syntax = 'php';
+                    } else if (src.endsWith('.ini')) {
+                        syntax = 'ini';
+                    } else if (src.endsWith('.xml')
+                        || src.endsWith('.dnproject') || src.endsWith('.fxml') || src.endsWith('.behaviour')) {
+                        syntax = 'xml';
+                    } else if (src.endsWith('.css')) {
+                        syntax = 'css';
+                    } else if (src.endsWith('.json')) {
+                        syntax = 'json';
+                    } else if (src.endsWith('.html')) {
+                        syntax = 'html';
+                    } else if (src.endsWith('.yml')) {
+                        syntax = 'yaml';
+                    } else if (/\.(txt|conf|axml|gitignore)$/.test(src)) {
+                        syntax = 'plain_text';
+                    }
+
+                    editor.setValue('Файл недоступен для просмотра.', -1);
+                    editor.getSession().setMode("ace/mode/" + syntax);
+                    editor.getSession().setTabSize(4);
+
+                    if (syntax) {
+                        modal.modal();
+                        editor.setValue('Загрузка файла, подождите...', -1);
+
+                        $.ajax('{{ href('/file/' ~ project.archive.fileId ~ '/contents/download') }}',
+                            {
+                                method: 'GET',
+                                data: {path: src},
+                                cache: false,
+                                success: function (data) {
+                                    editor.setValue(data, -1);
+                                },
+                                error: function () {
+                                    editor.setValue('Ошибка загрузки файла.', -1);
+                                }
+                            }
+                        );
+                    } else {
+                        modal.modal();
+                    }
+
+                    e.preventDefault();
+                    return false;
+                });
+            </script>
+        {% endif %}
+    {% endif %}
+{% endblock %}

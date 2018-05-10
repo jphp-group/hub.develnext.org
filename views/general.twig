@@ -1,0 +1,43 @@
+{% extends 'default' %}
+
+{% block root %}
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <span class="navbar-brand">
+                    <small>Сообщество</small>
+                    <a href="{{ href('/') }}">DevelHub</a>
+                </span>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    {% include 'inc/_menu' %}
+                </ul>
+
+                <div class="navbar-right">
+                    {% include 'account/_loginPopup' %}
+
+                    <!--<ul class="nav navbar-nav">
+                        <li><a href="{{ href('/account/register') }}">Регистрация</a></li>
+                        <li><button style="margin-top: 5px;" class="btn btn-success act-login" data-toggle="modal" data-target="#loginPopup">Войти</button></li>
+                    </ul>-->
+                </div>
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div class="content">
+            {% set _pageTitle = block('pageTitle') %}
+
+            {% if _pageTitle is not empty %}
+                <div class="page-header"><h1>{{ _pageTitle | raw }}</h1></div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </div>
+
+    </div><!-- /.container -->
+{% endblock %}
