@@ -1,6 +1,5 @@
 # hub.develnext.org
-
-Sources of http://hub.develnext.org
+The sources of http://hub.develnext.org
 
 ## How to run?
 
