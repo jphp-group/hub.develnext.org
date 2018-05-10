@@ -7,4 +7,5 @@ $server
     ->addWiki()
     ->addProjects()
     ->addAccount()
+    ->addRepository()
     ->run();

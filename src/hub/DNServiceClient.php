@@ -113,6 +113,43 @@ class DNServiceClient
         return $this->client->get("/auth/account/$id");
     }
 
+    /**
+     * @return HttpResponse
+     */
+    public function repoGetLastList(): HttpResponse
+    {
+        return $this->client->get('/repo/list/last');
+    }
+
+    /**
+     * @param string $name
+     * @return HttpResponse
+     */
+    public function repoFind(string $name): HttpResponse
+    {
+        return $this->client->get("/repo/find", ['name' => $name]);
+    }
+
+    /**
+     * /**
+     * @param string $query
+     * @return HttpResponse
+     */
+    public function repoSearch(string $query): HttpResponse
+    {
+        return $this->client->get("/repo/search", ['query' => $query]);
+    }
+
+    /**
+     * @param string $name
+     * @param string $version
+     * @return HttpResponse
+     */
+    public function repoGet(string $name, string $version): HttpResponse
+    {
+        return $this->client->get("/repo/get", ['name' => $name, 'version' => $version]);
+    }
+
     public function getEndpoint(): string
     {
         return $this->endpoint;

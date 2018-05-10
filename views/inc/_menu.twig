@@ -8,6 +8,10 @@
     <a href="{{ href('/wiki') }}"><i class="fa fa-book" aria-hidden="true"></i> Документация</a>
 </li>
 
+<li class="{{ urlPath() is starts('/repo/') or urlPath() == '/repo' ? 'active' : '' }}">
+    <a href="{{ href('/repo') }}"><i class="fa fa-building" aria-hidden="true"></i> JPPM Пакеты</a>
+</li>
+
 <li>
     <a href="https://vk.com/develnextstudio" target="_blank"><i class="fa fa-vk" style="color: #4c82ed" aria-hidden="true"></i> VK группа</a>
 </li>

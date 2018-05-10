@@ -64,7 +64,7 @@ class HubServer
             $host
         );
 
-        echo "-> Starting http server at $host:$port\n";
+        echo "-> Starting http server at http://$host:$port\n";
 
         $server->get('/assets/**', new HttpResourceHandler('./assets/'));
 
@@ -151,6 +151,10 @@ class HubServer
             return str::startsWith($value, $args['prefix']);
         }, ['prefix']);
 
+        $twigExtension->addFunction('pre', function (array $args) {
+            return "<pre>" . print_r($args['value'], true) . "</pre>";
+        }, ['value']);
+
         $twig->addExtension($twigExtension);
 
         $this->twig = $twig;
@@ -208,6 +212,45 @@ class HubServer
                 $model['account'] = $call->body();
 
                 $res->body($this->twig->render("account/get", $model));
+            }
+        });
+
+        return $this;
+    }
+
+    public function addRepository(): HubServer
+    {
+        $this->server->get('/repo', new HttpRedirectHandler('/repo/list/all'));
+        $this->server->get('/repo/', new HttpRedirectHandler('/repo/list/all'));
+
+        $this->server->get('/repo/list/all', function (HttpServerRequest $req, HttpServerResponse $res) {
+            $res->contentType('text/html;charset=utf-8');
+
+            $call = $this->client->repoGetLastList();
+
+            if (!$call->isSuccess()) {
+                $res->status(500);
+                $res->body($this->twig->render("error/5xx"));
+            } else {
+                $model['packages'] = $call->body();
+
+                $res->body($this->twig->render("repo/index", $model));
+            }
+        });
+
+        $this->server->get('/repo/list/search', function (HttpServerRequest $req, HttpServerResponse $res) {
+            $res->contentType('text/html;charset=utf-8');
+
+            $call = $this->client->repoSearch($req->query('q'));
+            $model['queryParam'] = $req->query('q');
+
+            if ($call->isServerError()) {
+                $res->status(500);
+                $res->body($this->twig->render("error/5xx"));
+            } else {
+                $model['packages'] = $call->isSuccess() ? $call->body() : null;
+
+                $res->body($this->twig->render("repo/search", $model));
             }
         });
 
