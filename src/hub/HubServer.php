@@ -13,6 +13,7 @@ use php\http\{
 };
 
 use php\lang\System;
+use php\lang\ThreadLocal;
 use php\lib\arr;
 use php\lib\fs;
 use php\lib\str;
@@ -42,10 +43,17 @@ class HubServer
     protected $client;
 
     /**
+     * @var ThreadLocal
+     */
+    protected $currentRequest;
+
+    /**
      * HubServer constructor.
      */
     public function __construct()
     {
+        $this->currentRequest = new ThreadLocal();
+
         $config = fs::isFile("./application.yml") ? fs::parse("./application.yml") : [];
 
         $port = $config['server']['port'] ?? 8080;
@@ -63,6 +71,7 @@ class HubServer
         $server->stopAtShutdown(true);
 
         $server->addFilter(function (HttpServerRequest $req, HttpServerResponse $res) {
+            $this->currentRequest->set($req);
             $res->header('X-Provided-By', 'JPHP ' . JPHP_VERSION);
         });
 
@@ -116,7 +125,7 @@ class HubServer
         }, ['url']);
 
         $twigExtension->addFunction('urlPath', function (array $args) {
-            return "/";
+            return $this->request()->path();
         });
 
         $twigExtension->addFunction('assetPath', function (array $args) {
@@ -203,5 +212,10 @@ class HubServer
         });
 
         return $this;
+    }
+
+    public function request(): ?HttpServerRequest
+    {
+        return $this->currentRequest->get();
     }
 }
